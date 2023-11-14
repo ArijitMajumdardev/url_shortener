@@ -15,7 +15,7 @@ async function handleSingUp(req,res){
     await User.create({
         name,
         email,
-        password
+        password,
 
     })
 
@@ -40,10 +40,10 @@ async function handleLogin(req,res){
      }
       
     //  const sessionId = uuidv4();
-    //  const token = setUser(user)
-     res.cookie("uid",token)
+     const token = setUser(user)
+     res.cookie("token",token)
 
-            res.json({token});
+            // res.json({token});
      return res.redirect('/');
 }
 

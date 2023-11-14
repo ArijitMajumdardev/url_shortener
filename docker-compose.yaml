@@ -1,0 +1,19 @@
+services:
+
+  url-mongodb:
+    image: mongo:latest
+    ports: 
+      - "27018:27017"
+    volumes:
+      - mongodb-data:/data/db
+    
+
+  app:
+    build: ./
+    ports:
+      - "8001:8001"
+    volumes:
+      - .:/usr/src/app
+
+volumes:
+  mongodb-data:

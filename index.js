@@ -1,7 +1,7 @@
 const express = require('express')
 const connectToMongoDB = require('./connection')
 const path = require('path');
-const {restrictToLoggedInUserOnly,checkAuth} = require('./middlewares/auth')
+const { checkForAuthentication, restrictTo,} = require('./middlewares/auth')
 const cookieParser = require("cookie-parser")
 
 
@@ -14,7 +14,8 @@ const userRouter = require('./routes/user')
 const app = express();
 
 
-connectToMongoDB('mongodb://127.0.0.1:27017/short_url');
+connectToMongoDB('mongodb://url-mongodb:27017/short_url');
+// connectToMongoDB('mongodb://127.0.0.1:27017/short_url');
 
 
 //setting up the view engine
@@ -27,11 +28,12 @@ app.set("views", path.resolve('./views')) ;
 app.use(express.json());
 app.use(express.urlencoded({extended:false}))
 app.use(cookieParser())
+app.use(checkForAuthentication);
 
 
-app.use("/",checkAuth,staticRouter);
+app.use("/",staticRouter);
 app.use("/user",userRouter)
-app.use("/url",restrictToLoggedInUserOnly,urlRouter);
+app.use("/url",restrictTo(["NORMAL"]),urlRouter);
 
 
 const PORT = process.env.PORT || 8001;
